@@ -1,27 +1,25 @@
 defmodule Client do
-  defp get() do
-    :inets.start()
+  defp get do
+    :inets.start
     {:ok, {_, _, content}} = :httpc.request 'http://localhost:9292'
     content
   end
 
-  defp parseContent(content) do
+  defp parse_content(content) do
     {:ok, result} = JSON.decode(content)
     result
   end
 
-  defp logResults(jsonMap) do
-    pi         = jsonMap["pi"] |> to_string
-    bestNumber = jsonMap["best_number"] |> to_string
-    IO.puts "Name: " <> jsonMap["name"]
-    IO.puts "PI: " <> pi
-    IO.puts "The Best Number: " <> bestNumber
-    IO.puts "Right Now: " <> jsonMap["right_now"]
+  defp log_results(%{"name" => name, "best_number" => best_number, "pi" => pi, "right_now" => right_now}) do
+    IO.puts "Name: #{name}"
+    IO.puts "PI: #{pi}"
+    IO.puts "The Best Number: #{best_number}"
+    IO.puts "Right Now: #{right_now}"
   end
 
-  def getJSON() do
-    get |> parseContent |> logResults
+  def get_JSON do
+    get |> parse_content |> log_results
   end
 end
 
-Client.getJSON()
+Client.get_JSON
