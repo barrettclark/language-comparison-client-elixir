@@ -1,6 +1,5 @@
 defmodule Client do
   defp get do
-    :inets.start
     {:ok, {_, _, content}} = :httpc.request 'http://localhost:9292'
     content
   end
