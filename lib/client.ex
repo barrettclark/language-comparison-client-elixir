@@ -40,6 +40,9 @@ Client.get_JSON
 
 connections = 100
 
+IO.puts "running single web request for baseline"
+{single_request_timing, _result} = :timer.tc(Client, :get_JSON, [])
+
 IO.puts "running baseline tasks for timing"
 {timing_tasks_baseline, _result} = :timer.tc(Spawner, :spawn_tasks, [connections, fn() -> 1 end])
 
@@ -49,6 +52,7 @@ IO.puts "running via tasks"
 IO.puts "running via serial map"
 {timing_serial, _result} = :timer.tc(SerialRunner, :execute, [connections, &Client.get_JSON/0])
 
+IO.puts "running a sinle request took #{single_request_timing} microseconds"
 IO.puts "running #{connections} baseline tasks took #{timing_tasks_baseline} microseconds"
 IO.puts "running #{connections} tasks took #{timing_tasks} microseconds"
 IO.puts "running #{connections} in a map took #{timing_serial} microseconds"
